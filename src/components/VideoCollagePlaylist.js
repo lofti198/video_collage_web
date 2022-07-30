@@ -21,11 +21,12 @@ const VideoCollagePlaylist = () => {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect for player", player);
-    if (switchCalledAtLeastOnceRef.current === false && player) {
-      switchCalledAtLeastOnceRef.current = true;
-      switchNextVideoFragment();
-    }
+    // if (player) player.playVideo();
+    // console.log("useEffect for player", player);
+    // if (switchCalledAtLeastOnceRef.current === false && player) {
+    //   switchCalledAtLeastOnceRef.current = true;
+    //   switchNextVideoFragment();
+    // }
   }, [player]);
 
   // useEffect(() => {
@@ -76,6 +77,13 @@ const VideoCollagePlaylist = () => {
     <>
       Just test of updates
       <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
+      <button
+        onClick={() => {
+          switchNextVideoFragment();
+        }}
+      >
+        Go
+      </button>
     </>
   );
 };
@@ -84,7 +92,7 @@ export default VideoCollagePlaylist;
 
 const demoPlaylist = [
   { id: "VcT8puLpNKA", start: 155, end: 167 },
-  { id: "VcT8puLpNKA", start: 15, end: 17 },
+  { id: "VcT8puLpNKA", start: 15, end: 20 },
 ];
 
 /*
