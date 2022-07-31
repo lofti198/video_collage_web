@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import YouTube from "react-youtube";
 
 const YoutubeErrorOnStart = () => {
-  const [player, setPlayer] = useState(null);
-
+  // const [player, setPlayer] = useState(null);
+  const playerRef = useRef();
+  const [isReady, setIsReady] = useState(false);
   const [videoId, setVideoId] = useState("VcT8puLpNKA");
 
   const opts = {
@@ -15,11 +16,20 @@ const YoutubeErrorOnStart = () => {
   };
 
   useEffect(() => {
-    if (player) player.playVideo();
-  }, [player]);
+    if (playerRef.current && isReady) {
+      setTimeout(() => {
+        console.log(playerRef.current, isReady);
+        playerRef.current.seekTo(3);
+        setTimeout(() => {
+          playerRef.current.playVideo();
+        }, 1000);
+      }, 1000);
+    }
+  }, [isReady]);
 
   const _onReady = (event) => {
-    setPlayer(event.target);
+    playerRef.current = event.target;
+    setIsReady(true);
   };
 
   return (

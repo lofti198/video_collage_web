@@ -5,7 +5,7 @@ import YoutubeErrorOnStart from "./components/YoutubeErrorOnStart";
 function App() {
   return (
     <>
-      <YoutubeErrorOnStart />
+      <VideoCollagePlaylist />
     </>
   );
 }
