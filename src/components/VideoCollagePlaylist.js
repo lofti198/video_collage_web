@@ -52,6 +52,11 @@ const VideoCollagePlaylist = () => {
       }
     }, 1000);
 
+    // setTimeout(async () => {
+    //   console.log("hihihihih");
+    //   switchToNextVideoFragment();
+    // }, 1000);
+
     return () => {
       clearInterval(interval);
     };
@@ -83,7 +88,12 @@ const VideoCollagePlaylist = () => {
   }, [curFragment, videoId, playerIsReady]);
 
   const launchCurVideoFragment = async () => {
-    console.log("seekTo", demoPlaylist[curFragment].start, playerRef.current);
+    console.log(
+      "seekTo",
+      demoPlaylist[curFragment].start,
+      playerRef.current,
+      playerRef?.current?.o
+    );
     playerRef.current.playVideo();
     setTimeout(() => {
       playerRef.current.seekTo(demoPlaylist[curFragment].start); //demoPlaylist[curFragment].start);
@@ -115,7 +125,7 @@ const VideoCollagePlaylist = () => {
     someRef.current = 1;
     //
     playerRef.current = event.target;
-
+    console.log("just", playerRef.current, playerRef?.current?.o);
     setPlayerIsReady(() => {
       console.log("setting true");
       playerIsReadyRef.current = true;
@@ -136,6 +146,7 @@ const VideoCollagePlaylist = () => {
       />
       <button
         onClick={() => {
+          console.log("go", playerRef.current);
           switchToNextVideoFragment();
         }}
       >
