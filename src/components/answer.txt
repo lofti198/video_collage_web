@@ -1,3 +1,10 @@
+else if (curFragment === -1 && playListData.length > 0) {
+      console.log("mamamam");
+      setCurFragment(0);
+    }
+
+
+##
 import { useState, useEffect } from "react";
 
 import YouTube, { YouTubePlayer } from "react-youtube";

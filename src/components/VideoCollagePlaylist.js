@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import YouTube from "react-youtube";
 import { getReadableTimeString, timeoutPromise } from "../libs/misc.js";
-const VideoCollagePlaylist = () => {
+const VideoCollagePlaylist = ({ playListData }) => {
+  console.log(playListData);
   //const [player, setPlayer] = useState(null);
   const playerRef = useRef(null);
 
@@ -38,10 +39,10 @@ const VideoCollagePlaylist = () => {
         const elapsed_seconds = Math.floor(playerRef.current.getCurrentTime());
         console.log(
           curFragmentRef.current,
-          demoPlaylist[curFragmentRef.current].end,
+          playListData[curFragmentRef.current].end,
           elapsed_seconds
         );
-        if (demoPlaylist[curFragmentRef.current].end === elapsed_seconds) {
+        if (playListData[curFragmentRef.current].end === elapsed_seconds) {
           console.log("Should switch!!!", elapsed_seconds);
           switchToNextVideoFragment();
         }
@@ -63,6 +64,7 @@ const VideoCollagePlaylist = () => {
   }, []);
 
   useEffect(() => {
+    console.log("useEffect", playerRef.current, curFragment, playerIsReady);
     if (
       playerRef.current &&
       curFragment >= 0 &&
@@ -70,14 +72,14 @@ const VideoCollagePlaylist = () => {
       //switchCalledAtLeastOnceRef.current === false
     ) {
       console.log("useEffect", curFragment, videoId, playerIsReadyRef.current);
-      if (demoPlaylist[curFragment].id !== videoId) {
-        console.log(demoPlaylist[curFragment].id, videoId);
+      if (playListData[curFragment].id !== videoId) {
+        console.log(playListData[curFragment].id, videoId);
         setVideoId((prev) => {
           setPlayerIsReady(() => {
             playerIsReadyRef.current = false;
             return false;
           });
-          return demoPlaylist[curFragment].id;
+          return playListData[curFragment].id;
         });
       } else {
         launchCurVideoFragment();
@@ -90,13 +92,14 @@ const VideoCollagePlaylist = () => {
   const launchCurVideoFragment = async () => {
     console.log(
       "seekTo",
-      demoPlaylist[curFragment].start,
+      playListData[curFragment].start,
       playerRef.current,
       playerRef?.current?.o
     );
     playerRef.current.playVideo();
     setTimeout(() => {
-      playerRef.current.seekTo(demoPlaylist[curFragment].start); //demoPlaylist[curFragment].start);
+      console.log("seeking to ", curFragment, playListData[curFragment].start);
+      playerRef.current.seekTo(playListData[curFragment].start); //playListData[curFragment].start);
       //playerRef.current.playVideo();
     }, 500);
 
@@ -109,11 +112,14 @@ const VideoCollagePlaylist = () => {
   const switchToNextVideoFragment = () => {
     setCurFragment((prev) => {
       let newValue;
-      if (prev < demoPlaylist.length - 1) {
+      if (prev < playListData.length - 1) {
         newValue = prev + 1;
       } else {
-        newValue = 0;
+        // TODO: launch artif rerender for the case if length is zero
+        // newValue = 0;
+        playerRef.current.pauseVideo();
       }
+      console.log("newValue of curFragment:", newValue);
       curFragmentRef.current = newValue;
       return newValue;
     });
@@ -157,12 +163,6 @@ const VideoCollagePlaylist = () => {
 };
 
 export default VideoCollagePlaylist;
-
-const demoPlaylist = [
-  { id: "VcT8puLpNKA", start: 15, end: 17 },
-  { id: "VcT8puLpNKA", start: 60, end: 63 },
-  { id: "hlkDQ7xa0fc", start: 160, end: 162 },
-];
 
 const VIDEO_PAUSED_STATE = 2;
 const VIDEO_PLAYING_STATE = 1;

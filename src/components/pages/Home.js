@@ -1,10 +1,20 @@
 import React from "react";
-import VideoCollagePlaylist from "../VideoCollagePlaylist";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ state }) => {
+  console.log(state);
   return (
     <>
-      <VideoCollagePlaylist />
+      {state &&
+        state.map((item) => {
+          return (
+            <div key={item.id}>
+              <Link to={`/playlist/${item.id}`} state={state}>
+                {item.id}
+              </Link>
+            </div>
+          );
+        })}
     </>
   );
 };
