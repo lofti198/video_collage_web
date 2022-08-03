@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import VideoCollagePlaylist from "../VideoCollagePlaylist";
 
-const PlayList = ({ state }) => {
+import { useSelector } from "react-redux";
+
+const PlayList = () => {
+  const playlists = useSelector((state) => {
+    return state.playlists.list;
+  });
+
   const { id } = useParams();
   const [playListData, setPlayListData] = useState();
   useEffect(() => {
-    if (state && state.length > 0) {
-      const data = state.find((item) => {
-        console.log(item, id);
+    if (playlists && playlists.length > 0) {
+      const data = playlists.find((item) => {
         return item.id === id;
       });
       if (!data) {
@@ -18,8 +23,8 @@ const PlayList = ({ state }) => {
       }
       //
     }
-  }, [state]);
-  console.log(id, state);
+  }, [playlists]);
+
   return (
     <>{playListData && <VideoCollagePlaylist playListData={playListData} />}</>
   );

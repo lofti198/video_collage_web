@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import YouTube from "react-youtube";
 import { getReadableTimeString, timeoutPromise } from "../libs/misc.js";
+
 const VideoCollagePlaylist = ({ playListData }) => {
-  console.log(playListData);
   //const [player, setPlayer] = useState(null);
   const playerRef = useRef(null);
 
@@ -12,10 +12,9 @@ const VideoCollagePlaylist = ({ playListData }) => {
   const curFragmentRef = useRef(-1);
   const someRef = useRef(-1);
   const [videoId, setVideoId] = useState();
+  const [switchToRerender, setSwitchToRerender] = useState(false);
 
-  // const switchCalledAtLeastOnceRef = useRef(false);
   const opts = {
-    //  height: '390',
     width: "100%",
     playerVars: {
       autoplay: 0,
@@ -25,38 +24,20 @@ const VideoCollagePlaylist = ({ playListData }) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      // console.log(
-      //   "interval callback",
-      //   playerRef.current,
-      //   playerIsReadyRef.current
-      // );
       if (
         playerRef.current?.playerInfo?.playerState === VIDEO_PLAYING_STATE &&
         curFragmentRef.current > -1 &&
         playerIsReadyRef.current
       ) {
-        //console.log("interval callback 1");
         const elapsed_seconds = Math.floor(playerRef.current.getCurrentTime());
-        console.log(
-          curFragmentRef.current,
-          playListData[curFragmentRef.current].end,
-          elapsed_seconds
-        );
+
         if (playListData[curFragmentRef.current].end === elapsed_seconds) {
-          console.log("Should switch!!!", elapsed_seconds);
           switchToNextVideoFragment();
         }
 
         const formattedCurrentTime = getReadableTimeString(elapsed_seconds);
-
-        //console.log(formattedCurrentTime);
       }
     }, 1000);
-
-    // setTimeout(async () => {
-    //   console.log("hihihihih");
-    //   switchToNextVideoFragment();
-    // }, 1000);
 
     return () => {
       clearInterval(interval);
@@ -64,14 +45,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect", playerRef.current, curFragment, playerIsReady);
-    if (
-      playerRef.current &&
-      curFragment >= 0 &&
-      playerIsReady
-      //switchCalledAtLeastOnceRef.current === false
-    ) {
-      console.log("useEffect", curFragment, videoId, playerIsReadyRef.current);
+    if (playerRef.current && curFragment >= 0 && playerIsReady) {
       if (playListData[curFragment].id !== videoId) {
         console.log(playListData[curFragment].id, videoId);
         setVideoId((prev) => {
@@ -84,29 +58,15 @@ const VideoCollagePlaylist = ({ playListData }) => {
       } else {
         launchCurVideoFragment();
       }
-      // switchCalledAtLeastOnceRef.current = true;
-      //switchNextVideoFragment();
     }
-  }, [curFragment, videoId, playerIsReady]);
+  }, [curFragment, videoId, playerIsReady, switchToRerender]);
 
   const launchCurVideoFragment = async () => {
-    console.log(
-      "seekTo",
-      playListData[curFragment].start,
-      playerRef.current,
-      playerRef?.current?.o
-    );
     playerRef.current.playVideo();
     setTimeout(() => {
       console.log("seeking to ", curFragment, playListData[curFragment].start);
-      playerRef.current.seekTo(playListData[curFragment].start); //playListData[curFragment].start);
-      //playerRef.current.playVideo();
+      playerRef.current.seekTo(playListData[curFragment].start);
     }, 500);
-
-    // setTimeout(() => {
-    //   playerRef.current.playVideo();
-    // }, 2000);
-    // await timeoutPromise(1000);
   };
 
   const switchToNextVideoFragment = () => {
@@ -115,9 +75,8 @@ const VideoCollagePlaylist = ({ playListData }) => {
       if (prev < playListData.length - 1) {
         newValue = prev + 1;
       } else {
-        // TODO: launch artif rerender for the case if length is zero
-        // newValue = 0;
-        playerRef.current.pauseVideo();
+        newValue = 0;
+        setSwitchToRerender((prev) => !prev);
       }
       console.log("newValue of curFragment:", newValue);
       curFragmentRef.current = newValue;
@@ -125,15 +84,22 @@ const VideoCollagePlaylist = ({ playListData }) => {
     });
   };
 
-  const _onReady = (event) => {
-    console.log("onready");
+  const switchToSpecifiedVideoFragment = (index) => {
+    setCurFragment((prev) => {
+      if (index < playListData.length) {
+        curFragmentRef.current = index;
+        setSwitchToRerender((prev) => !prev);
+        return index;
+      }
+    });
+  };
 
+  const _onReady = (event) => {
     someRef.current = 1;
     //
     playerRef.current = event.target;
-    console.log("just", playerRef.current, playerRef?.current?.o);
+
     setPlayerIsReady(() => {
-      console.log("setting true");
       playerIsReadyRef.current = true;
       return true;
     });
@@ -141,23 +107,31 @@ const VideoCollagePlaylist = ({ playListData }) => {
 
   return (
     <>
-      Just test of updates
-      <YouTube
-        videoId={videoId}
-        opts={opts}
-        onReady={_onReady}
-        // onStateChange={(e) => {
-        //   console.log("on state changed", e, e.target.getPlayerState());
-        // }}
-      />
+      <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
       <button
         onClick={() => {
-          console.log("go", playerRef.current);
           switchToNextVideoFragment();
         }}
       >
         Go
       </button>
+      <div>
+        {playListData &&
+          playListData.map((item, index) => {
+            return (
+              <div
+                key={index}
+                onDoubleClick={() => {
+                  switchToSpecifiedVideoFragment(index);
+                }}
+              >
+                {index === curFragment && "NOW >> "}
+                {item.id} {getReadableTimeString(item.start)} -{" "}
+                {getReadableTimeString(item.end)}
+              </div>
+            );
+          })}
+      </div>
     </>
   );
 };

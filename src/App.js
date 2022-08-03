@@ -1,26 +1,31 @@
 import logo from "./logo.svg";
 import "./App.css";
-import VideoCollagePlaylist from "./components/VideoCollagePlaylist";
-import YoutubeErrorOnStart from "./components/YoutubeErrorOnStart";
 import Home from "./components/pages/Home";
 import PlayList from "./components/pages/PlayList";
 import NotFound from "./components/pages/NotFound";
-import { Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { data } from "./data";
+import { Routes, Route } from "react-router-dom";
+import { load } from "./redux/playlistsSlice";
+
+import { useDispatch } from "react-redux";
+
+const loadPlaylistsAsync = () => {
+  return async (dispatch) => {
+    dispatch(load());
+  };
+};
+
 function App() {
-  const [state, setState] = useState([]);
-  useEffect(() => {
-    setState([...data.lists]);
-  }, []);
+  const dispatch = useDispatch();
+  dispatch(loadPlaylistsAsync());
+
   return (
     <>
       <div className="App">
         <h1>Welcome to React Router!</h1>
         <Routes>
           <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home state={state} />} />
-          <Route path="playlist/:id" element={<PlayList state={state} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="playlist/:id" element={<PlayList />} />
         </Routes>
       </div>
     </>
