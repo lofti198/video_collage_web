@@ -11,10 +11,17 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { removePlaylist } from "../../redux/playlistsSlice";
+
+const useStyles = makeStyles({
+  header: {
+    marginTop: "50px",
+  },
+});
 
 const removePlaylistAsync = (id) => {
   return async (dispatch) => {
@@ -23,15 +30,12 @@ const removePlaylistAsync = (id) => {
 };
 
 const Home = () => {
+  const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const playlists = useSelector((state) => {
     return state.playlists.list;
   });
   const dispatch = useDispatch();
-
-  const headerStyle = {
-    marginTop: "30px",
-  };
 
   return (
     <div className="playlists-container">
@@ -41,7 +45,7 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <Typography variant="h4" style={headerStyle}>
+          <Typography variant="h4" className={classes.header}>
             My playlists
           </Typography>
           <Table>
