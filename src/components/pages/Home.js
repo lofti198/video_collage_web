@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { CircularProgress } from "@material-ui/core";
-// import DeleteIcon from "@material-ui/icons/Delete";
-// import IconButton from "@material-ui/core/IconButton";
-// import Table from "@material-ui/core/Table";
-// import TableBody from "@material-ui/core/TableBody";
-// import TableCell from "@material-ui/core/TableCell";
-// import TableHead from "@material-ui/core/TableHead";
-// import TableRow from "@material-ui/core/TableRow";
-// import Typography from "@material-ui/core/Typography";
 import {
   CircularProgress,
   IconButton,
@@ -20,25 +11,39 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-// import DeleteIcon from "@mui/icons-material/Delete";
 
 import { Delete as DeleteIcon } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { removePlaylist } from "../../redux/playlistsSlice";
+
+const removePlaylistAsync = (id) => {
+  return async (dispatch) => {
+    dispatch(removePlaylist({ id: id }));
+  };
+};
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const playlists = useSelector((state) => {
     return state.playlists.list;
   });
+  const dispatch = useDispatch();
+
+  const headerStyle = {
+    marginTop: "30px",
+  };
 
   return (
-    <>
+    <div className="playlists-container">
       {isLoading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress />
         </div>
       ) : (
         <>
-          <Typography variant="h4" /*style={style}*/>My playlists</Typography>
+          <Typography variant="h4" style={headerStyle}>
+            My playlists
+          </Typography>
           <Table>
             <TableHead>
               <TableRow>
@@ -54,8 +59,12 @@ const Home = () => {
                       <Link to={`/playlist/${item.id}`}>{item.id}</Link>
                     </TableCell>
 
-                    <TableCell align="right" onClick={() => {}}>
-                      <IconButton>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          dispatch(removePlaylistAsync(item.id));
+                        }}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -65,7 +74,7 @@ const Home = () => {
           </Table>
         </>
       )}
-    </>
+    </div>
   );
 };
 

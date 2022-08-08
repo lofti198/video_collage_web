@@ -12,9 +12,13 @@ export const playlistsSlice = createSlice({
       // for (let index = 0; index < 2000000000; index++) {}
       state.list = data.list;
     },
+    removePlaylist: (state, action) => {
+      console.log("remove", action);
+      state.list = state.list.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { load } = playlistsSlice.actions;
+export const { load, removePlaylist } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;
