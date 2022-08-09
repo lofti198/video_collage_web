@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -17,22 +17,29 @@ import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { removePlaylist } from "../../redux/playlistsSlice";
 
-const useStyles = makeStyles({
-  header: {
-    marginTop: "50px",
-  },
-});
-
 const removePlaylistAsync = (id) => {
   return async (dispatch) => {
     dispatch(removePlaylist({ id: id }));
   };
 };
 
+const useStyles = makeStyles({
+  header: {
+    marginTop: "30px",
+  },
+});
+
 const Home = () => {
   const classes = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  console.log("isLoading", isLoading);
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+
   const playlists = useSelector((state) => {
+    console.log("useSelector", state.playlists.list);
+    if (isLoading) setIsLoading(false);
     return state.playlists.list;
   });
   const dispatch = useDispatch();
@@ -45,9 +52,9 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <Typography variant="h4" className={classes.header}>
-            My playlists
-          </Typography>
+          <div className={classes.header}>
+            <Typography variant="h4">My playlists</Typography>
+          </div>
           <Table>
             <TableHead>
               <TableRow>
