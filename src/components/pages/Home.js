@@ -30,6 +30,7 @@ const useStyles = makeStyles({
 });
 
 const Home = () => {
+  console.log("Home render");
   const classes = useStyles();
   const playlists = useSelector((state) => state.playlists.list);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,17 +38,23 @@ const Home = () => {
   useEffect(() => {
     if (playlists.length) {
       setTimeout(() => {
-        setIsLoading(false)
-      }, 1500)
+        setIsLoading(false);
+      }, 1500);
     }
-  }, [])
+  }, []);
 
   const dispatch = useDispatch();
 
   return (
     <div className="playlists-container">
       {isLoading ? (
-        <div style={{ display: "flex", justifyContent: "center", marginTop: '10rem' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10rem",
+          }}
+        >
           <CircularProgress />
         </div>
       ) : (

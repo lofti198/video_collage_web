@@ -9,8 +9,15 @@ export const playlistsSlice = createSlice({
   initialState,
   reducers: {
     load: (state) => {
-      for (let index = 0; index < 1000000000; index++) {}
-      console.log("hi");
+      console.log(
+        "before long operation in load reducer",
+        new Date().getTime() / 1000
+      );
+      for (let index = 0; index < 2000000000; index++) {}
+      console.log(
+        "after long operation in load reducer",
+        new Date().getTime() / 1000
+      );
       state.list = data.list;
     },
     removePlaylist: (state, action) => {
