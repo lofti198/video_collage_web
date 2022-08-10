@@ -47,7 +47,7 @@ const Home = () => {
 
   return (
     <div className="playlists-container">
-      {isLoading ? (
+      {/* {isLoading ? (
         <div
           style={{
             display: "flex",
@@ -57,7 +57,7 @@ const Home = () => {
         >
           <CircularProgress />
         </div>
-      ) : (
+      ) : ( */}
         <>
           <div className={classes.header}>
             <Typography variant="h4">My playlists</Typography>
@@ -70,7 +70,17 @@ const Home = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {playlists &&
+              {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10rem",
+          }}
+        >
+          <CircularProgress />
+        </div>) : (<div>
+          {playlists &&
                 playlists.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell align="left">
@@ -88,10 +98,12 @@ const Home = () => {
                     </TableCell>
                   </TableRow>
                 ))}
+        </div>)}
+              
             </TableBody>
           </Table>
         </>
-      )}
+      
     </div>
   );
 };
