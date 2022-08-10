@@ -43,7 +43,7 @@ const Home = () => {
 
   return (
     <div className="playlists-container">
-      {!playlists ? (
+      {isLoading ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress />
         </div>
