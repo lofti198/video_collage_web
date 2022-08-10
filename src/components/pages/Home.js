@@ -31,20 +31,23 @@ const useStyles = makeStyles({
 
 const Home = () => {
   const classes = useStyles();
+  const playlists = useSelector((state) => state.playlists.list);
   const [isLoading, setIsLoading] = useState(true);
-  console.log("isLoading", isLoading);
 
-  const playlists = useSelector((state) => {
-    console.log("useSelector", state.playlists.list);
-    if (isLoading) setIsLoading(false);
-    return state.playlists.list;
-  });
+  useEffect(() => {
+    if (playlists.length) {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1500)
+    }
+  }, [])
+
   const dispatch = useDispatch();
 
   return (
     <div className="playlists-container">
       {isLoading ? (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: '10rem' }}>
           <CircularProgress />
         </div>
       ) : (
