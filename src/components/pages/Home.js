@@ -32,6 +32,7 @@ const useStyles = makeStyles({
 const Home = () => {
   console.log("Home render");
   const classes = useStyles();
+  const dispatch = useDispatch();
   const playlists = useSelector((state) => state.playlists.list);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,58 +40,61 @@ const Home = () => {
     if (playlists.length) {
       setTimeout(() => {
         setIsLoading(false);
-      }, 1500);
+      }, 1000);
     }
   }, []);
 
-  const dispatch = useDispatch();
 
   return (
     <div className="playlists-container">
+      <div className={classes.header}>
+        <Typography variant="h4">My playlists</Typography>
+      </div>
       {isLoading ? (
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "10rem",
+            marginTop: "3rem",
           }}
         >
           <CircularProgress />
         </div>
       ) : (
-        <>
-          <div className={classes.header}>
-            <Typography variant="h4">My playlists</Typography>
-          </div>
-          <Table>
-            <TableHead>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!playlists.length && (
               <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="center">
+                  List is empty, please fill it!
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {playlists &&
-                playlists.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell align="left">
-                      <Link to={`/playlist/${item.id}`}>{item.id}</Link>
-                    </TableCell>
+            )}
+            {playlists.map(({ id }) => (
+              <TableRow key={id}>
+                <TableCell align="left">
+                  <Link to={`/playlist/${id}`}>{id}</Link>
+                </TableCell>
 
-                    <TableCell align="right">
-                      <IconButton
-                        onClick={() => {
-                          dispatch(removePlaylistAsync(item.id));
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={() => {
+                      dispatch(removePlaylistAsync(id));
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
     </div>
   );
