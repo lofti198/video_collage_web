@@ -29,11 +29,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const { loading, list } = useSelector((state) => state.playlists);
 
-  useEffect(() => {
-    dispatch(load());
-  }, []);
-
-
   return (
     <div className="playlists-container">
       <div className={classes.header}>
