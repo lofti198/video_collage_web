@@ -5,18 +5,22 @@ import PlayList from "./components/pages/PlayList";
 import NotFound from "./components/pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import { load } from "./redux/playlistsSlice";
-
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-const loadPlaylistsAsync = () => {
-  return async (dispatch) => {
-    dispatch(load());
-  };
-};
+// const loadPlaylistsAsync = () => {
+//   return async (dispatch) => {
+//     dispatch(load());
+//   };
+// };
 
 function App() {
   const dispatch = useDispatch();
-  dispatch(loadPlaylistsAsync());
+  useEffect(() => {
+    console.log("1");
+    dispatch(load());
+    console.log("2");
+  }, []);
 
   return (
     <>

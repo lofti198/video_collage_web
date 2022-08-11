@@ -33,15 +33,7 @@ const Home = () => {
   console.log("Home render");
   const classes = useStyles();
   const playlists = useSelector((state) => state.playlists.list);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (playlists.length) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1500);
-    }
-  }, []);
+  const isLoading = useSelector((state) => state.playlists.loading);
 
   const dispatch = useDispatch();
 

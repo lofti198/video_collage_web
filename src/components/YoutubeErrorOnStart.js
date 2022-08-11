@@ -34,7 +34,9 @@ const YoutubeErrorOnStart = () => {
 
   return (
     <>
-      <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
+      <div style={{ margin: auto }}>
+        <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
+      </div>
     </>
   );
 };
