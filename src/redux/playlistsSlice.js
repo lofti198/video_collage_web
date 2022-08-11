@@ -43,7 +43,7 @@ export const playlistsSlice = createSlice({
     [load.fulfilled]: (state, action) => {
       state.loading = false;
       console.log("fulfilled", action);
-      action.payload.list = action.payload.list;
+      state.list = action.payload.list;
       // if (state.data.length < 1) {
       //     state.data = action.payload;
       // } else {
