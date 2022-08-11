@@ -107,30 +107,37 @@ const VideoCollagePlaylist = ({ playListData }) => {
 
   return (
     <>
-      <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
-      <button
-        onClick={() => {
-          switchToNextVideoFragment();
-        }}
-      >
-        Go
-      </button>
-      <div>
-        {playListData &&
-          playListData.map((item, index) => {
-            return (
-              <div
-                key={index}
-                onDoubleClick={() => {
-                  switchToSpecifiedVideoFragment(index);
-                }}
-              >
-                {index === curFragment && "NOW >> "}
-                {item.id} {getReadableTimeString(item.start)} -{" "}
-                {getReadableTimeString(item.end)}
-              </div>
-            );
-          })}
+      <div className="video-grid">
+        <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
+        <div>
+          <button
+            style={{ margin: 15 }}
+            onClick={() => {
+              switchToNextVideoFragment();
+            }}
+          >
+            Go
+          </button>
+          <div>
+            {playListData &&
+              playListData.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    onDoubleClick={() => {
+                      switchToSpecifiedVideoFragment(index);
+                    }}
+                  >
+                    {/* {index === curFragment && <b>} */}
+                    Slice {index}
+                    {/* {index === curFragment && </b>} */}
+                    {/* {item.id} {getReadableTimeString(item.start)} -{" "}
+                    {getReadableTimeString(item.end)} */}
+                  </div>
+                );
+              })}
+          </div>
+        </div>
       </div>
     </>
   );
