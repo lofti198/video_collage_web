@@ -15,13 +15,7 @@ import { makeStyles } from "@mui/styles";
 
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { removePlaylist } from "../../redux/playlistsSlice";
-
-const removePlaylistAsync = (id) => {
-  return async (dispatch) => {
-    dispatch(removePlaylist({ id: id }));
-  };
-};
+import { load, removePlaylist } from "../../redux/playlistsSlice";
 
 const useStyles = makeStyles({
   header: {
@@ -33,15 +27,10 @@ const Home = () => {
   console.log("Home render");
   const classes = useStyles();
   const dispatch = useDispatch();
-  const playlists = useSelector((state) => state.playlists.list);
-  const [isLoading, setIsLoading] = useState(true);
+  const { loading, list } = useSelector((state) => state.playlists);
 
   useEffect(() => {
-    if (playlists.length) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
+    dispatch(load());
   }, []);
 
 
@@ -50,7 +39,7 @@ const Home = () => {
       <div className={classes.header}>
         <Typography variant="h4">My playlists</Typography>
       </div>
-      {isLoading ? (
+      {loading ? (
         <div
           style={{
             display: "flex",
@@ -69,14 +58,14 @@ const Home = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!playlists.length && (
+            {!list.length && (
               <TableRow>
                 <TableCell align="center">
                   List is empty, please fill it!
                 </TableCell>
               </TableRow>
             )}
-            {playlists.map(({ id }) => (
+            {list.map(({ id }) => (
               <TableRow key={id}>
                 <TableCell align="left">
                   <Link to={`/playlist/${id}`}>{id}</Link>
@@ -85,7 +74,7 @@ const Home = () => {
                 <TableCell align="right">
                   <IconButton
                     onClick={() => {
-                      dispatch(removePlaylistAsync(id));
+                      dispatch(removePlaylist({ id }));
                     }}
                   >
                     <DeleteIcon />

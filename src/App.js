@@ -7,16 +7,14 @@ import { Routes, Route } from "react-router-dom";
 import { load } from "./redux/playlistsSlice";
 
 import { useDispatch } from "react-redux";
-
-const loadPlaylistsAsync = () => {
-  return async (dispatch) => {
-    dispatch(load());
-  };
-};
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
-  dispatch(loadPlaylistsAsync());
+
+  useEffect(() => {
+    dispatch(load());
+  }, [])
 
   return (
     <>
