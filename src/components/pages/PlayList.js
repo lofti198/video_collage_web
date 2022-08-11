@@ -26,7 +26,12 @@ const PlayList = () => {
   }, [playlists]);
 
   return (
-    <>{playListData && <VideoCollagePlaylist playListData={playListData} />}</>
+    <>
+      {" "}
+      <div style={{ margin: "auto" }}>
+        {playListData && <VideoCollagePlaylist playListData={playListData} />}
+      </div>
+    </>
   );
 };
 

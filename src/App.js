@@ -5,28 +5,27 @@ import PlayList from "./components/pages/PlayList";
 import NotFound from "./components/pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import { load } from "./redux/playlistsSlice";
-
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 function App() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(load());
-  }, [])
+    useEffect(() => {
+        dispatch(load());
+    }, [])
 
-  return (
-    <>
-      <div className="App">
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="playlist/:id" element={<PlayList />} />
-        </Routes>
-      </div>
-    </>
-  );
+    return (
+        <>
+            <div className="App">
+                <Routes>
+                    <Route path="*" element={<NotFound />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="playlist/:id" element={<PlayList />} />
+                </Routes>
+            </div>
+        </>
+    );
 }
 
 export default App;
