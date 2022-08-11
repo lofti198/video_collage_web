@@ -27,8 +27,8 @@ const PlayList = () => {
 
   return (
     <>
-      {" "}
-      <div style={{ margin: "auto" }}>
+      <h3>Title</h3>
+      <div className="playlist-page-container">
         {playListData && <VideoCollagePlaylist playListData={playListData} />}
       </div>
     </>
