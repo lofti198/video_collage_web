@@ -1,58 +1,56 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { data } from "../data";
+
 const initialState = {
-  loading: false,
-  error: "",
   list: [],
+  loading: false,
 };
 
-export const load = createAsyncThunk("app/load", async (params, thunkAPI) => {
-  console.log(
-    "before long operation in load reducer",
-    new Date().getTime() / 1000
-  );
-  for (let index = 0; index < 2000000000; index++) {}
-  console.log(
-    "after long operation in load reducer",
-    new Date().getTime() / 1000
-  );
-  return { ...initialState, list: data.list };
-});
+export const load = createAsyncThunk(
+  'playList/getPlayList',
+  async () => new Promise(resolve => setTimeout(() => resolve(data.list), 1000)).then(data => data)
+);
+export const removePlaylist = createAsyncThunk(
+  'playList/removeFromPlayList',
+  async ({ id }) => new Promise(resolve => resolve(id)).then((id) => id)
+);
+
 export const playlistsSlice = createSlice({
   name: "playlists",
   initialState,
-  reducers: {
-    // load: (state) => {
-
-    // },
-    removePlaylist: (state, action) => {
-      console.log("remove", action);
-      state.list = state.list.filter((item) => item.id !== action.payload.id);
-    },
-  },
-
   extraReducers: {
     [load.pending]: (state) => {
-      console.log("pending");
-      state.loading = true;
+      return {
+        ...state,
+        loading: true
+      }
+    },
+    [load.fulfilled]: (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        list: payload
+      }
     },
     [load.rejected]: (state) => {
-      state.loading = false;
-      state.error = true;
+      return {
+        ...state,
+        loading: false
+      }
     },
-    [load.fulfilled]: (state, action) => {
-      state.loading = false;
-      console.log("fulfilled", action);
-      state.list = action.payload.list;
-      // if (state.data.length < 1) {
-      //     state.data = action.payload;
-      // } else {
-      //     state.data.items.push(...action.payload.channel.items);
-      // }
+    [removePlaylist.pending]: (state, _) => {
+      return { ...state }
+    },
+    [removePlaylist.fulfilled]: (state, { payload }) => {
+      return {
+        ...state,
+        list: state.list.filter(item => item.id !== payload)
+      }
+    },
+    [removePlaylist.rejected]: (state, _) => {
+      return { ...state }
     },
   },
 });
-
-export const { removePlaylist } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;

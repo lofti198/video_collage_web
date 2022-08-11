@@ -15,13 +15,7 @@ import { makeStyles } from "@mui/styles";
 
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { removePlaylist } from "../../redux/playlistsSlice";
-
-const removePlaylistAsync = (id) => {
-  return async (dispatch) => {
-    dispatch(removePlaylist({ id: id }));
-  };
-};
+import { load, removePlaylist } from "../../redux/playlistsSlice";
 
 const useStyles = makeStyles({
   header: {
@@ -32,57 +26,59 @@ const useStyles = makeStyles({
 const Home = () => {
   console.log("Home render");
   const classes = useStyles();
-  const playlists = useSelector((state) => state.playlists.list);
-  const isLoading = useSelector((state) => state.playlists.loading);
-
   const dispatch = useDispatch();
+  const { loading, list } = useSelector((state) => state.playlists);
 
   return (
     <div className="playlists-container">
-      {isLoading ? (
+      <div className={classes.header}>
+        <Typography variant="h4">My playlists</Typography>
+      </div>
+      {loading ? (
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "10rem",
+            marginTop: "3rem",
           }}
         >
           <CircularProgress />
         </div>
       ) : (
-        <>
-          <div className={classes.header}>
-            <Typography variant="h4">My playlists</Typography>
-          </div>
-          <Table>
-            <TableHead>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!list.length && (
               <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="center">
+                  List is empty, please fill it!
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {playlists &&
-                playlists.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell align="left">
-                      <Link to={`/playlist/${item.id}`}>{item.id}</Link>
-                    </TableCell>
+            )}
+            {list.map(({ id }) => (
+              <TableRow key={id}>
+                <TableCell align="left">
+                  <Link to={`/playlist/${id}`}>{id}</Link>
+                </TableCell>
 
-                    <TableCell align="right">
-                      <IconButton
-                        onClick={() => {
-                          dispatch(removePlaylistAsync(item.id));
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={() => {
+                      dispatch(removePlaylist({ id }));
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
     </div>
   );

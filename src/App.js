@@ -8,31 +8,24 @@ import { load } from "./redux/playlistsSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-// const loadPlaylistsAsync = () => {
-//   return async (dispatch) => {
-//     dispatch(load());
-//   };
-// };
-
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("1");
-    dispatch(load());
-    console.log("2");
-  }, []);
+    const dispatch = useDispatch();
 
-  return (
-    <>
-      <div className="App">
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="playlist/:id" element={<PlayList />} />
-        </Routes>
-      </div>
-    </>
-  );
+    useEffect(() => {
+        dispatch(load());
+    }, [])
+
+    return (
+        <>
+            <div className="App">
+                <Routes>
+                    <Route path="*" element={<NotFound />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="playlist/:id" element={<PlayList />} />
+                </Routes>
+            </div>
+        </>
+    );
 }
 
 export default App;
