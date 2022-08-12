@@ -5,7 +5,7 @@ import { getReadableTimeString, timeoutPromise } from "../libs/misc.js";
 const VideoCollagePlaylist = ({ playListData }) => {
   //const [player, setPlayer] = useState(null);
   const playerRef = useRef(null);
-
+  const [buttonTitle, setButtonTitle] = useState("Play");
   const [playerIsReady, setPlayerIsReady] = useState(false);
   const playerIsReadyRef = useRef(false);
   const [curFragment, setCurFragment] = useState(-1);
@@ -62,7 +62,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
   }, [curFragment, videoId, playerIsReady, switchToRerender]);
 
   const launchCurVideoFragment = async () => {
-    playerRef.current.playVideo();
+    playerRef.current?.playVideo();
     setTimeout(() => {
       console.log("seeking to ", curFragment, playListData[curFragment].start);
       playerRef.current.seekTo(playListData[curFragment].start);
@@ -108,15 +108,46 @@ const VideoCollagePlaylist = ({ playListData }) => {
   return (
     <>
       <div className="video-grid">
-        <YouTube videoId={videoId} opts={opts} onReady={_onReady} />
+        <YouTube
+          videoId={videoId}
+          opts={opts}
+          onReady={_onReady}
+          onStateChange={() => {
+            // console.log(
+            //   "State changed",
+            if (
+              playerRef.current?.playerInfo?.playerState === VIDEO_PLAYING_STATE
+            ) {
+              setButtonTitle("Next");
+            } else if (
+              playerRef.current?.playerInfo?.playerState === VIDEO_PAUSED_STATE
+            ) {
+              setButtonTitle("Play");
+            }
+            // playerRef.current?.playerInfo?.playerState
+            // );
+          }}
+        />
         <div>
           <button
             style={{ margin: 15 }}
             onClick={() => {
-              switchToNextVideoFragment();
+              console.log(playerRef.current?.playerInfo?.playerState);
+              if (
+                playerRef.current?.playerInfo?.playerState ===
+                  VIDEO_HAS_NOT_PLAYED_STATE ||
+                playerRef.current?.playerInfo?.playerState ===
+                  VIDEO_IN_QUEUE_STATE ||
+                playerRef.current?.playerInfo?.playerState ===
+                  VIDEO_PLAYING_STATE
+              )
+                switchToNextVideoFragment();
+              else {
+                playerRef.current?.playVideo();
+              }
             }}
           >
-            Go
+            {buttonTitle}
           </button>
           <div>
             {playListData &&
@@ -128,8 +159,12 @@ const VideoCollagePlaylist = ({ playListData }) => {
                       switchToSpecifiedVideoFragment(index);
                     }}
                   >
-                    {/* {index === curFragment && <b>} */}
-                    Slice {index}
+                    {index === curFragment ? (
+                      <b>Slice {index}</b>
+                    ) : (
+                      <>Slice {index}</>
+                    )}
+
                     {/* {index === curFragment && </b>} */}
                     {/* {item.id} {getReadableTimeString(item.start)} -{" "}
                     {getReadableTimeString(item.end)} */}
@@ -147,3 +182,13 @@ export default VideoCollagePlaylist;
 
 const VIDEO_PAUSED_STATE = 2;
 const VIDEO_PLAYING_STATE = 1;
+const VIDEO_HAS_NOT_PLAYED_STATE = -1;
+const VIDEO_IN_QUEUE_STATE = 5;
+/*
+-1 – воспроизведение видео не началось
+0 – воспроизведение видео завершено
+1 – воспроизведение
+2 – пауза
+3 – буферизация
+5 – видео находится в очереди
+*/

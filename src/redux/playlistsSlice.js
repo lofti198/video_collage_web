@@ -6,13 +6,15 @@ const initialState = {
   loading: false,
 };
 
-export const load = createAsyncThunk(
-  'playList/getPlayList',
-  async () => new Promise(resolve => setTimeout(() => resolve(data.list), 1000)).then(data => data)
+export const load = createAsyncThunk("playList/getPlayList", async () =>
+  // Waiting load from file simulation
+  new Promise((resolve) => setTimeout(() => resolve(data.list), 1500)).then(
+    (data) => data
+  )
 );
 export const removePlaylist = createAsyncThunk(
-  'playList/removeFromPlayList',
-  async ({ id }) => new Promise(resolve => resolve(id)).then((id) => id)
+  "playList/removeFromPlayList",
+  async ({ id }) => new Promise((resolve) => resolve(id)).then((id) => id)
 );
 
 export const playlistsSlice = createSlice({
@@ -22,33 +24,33 @@ export const playlistsSlice = createSlice({
     [load.pending]: (state) => {
       return {
         ...state,
-        loading: true
-      }
+        loading: true,
+      };
     },
     [load.fulfilled]: (state, { payload }) => {
       return {
         ...state,
         loading: false,
-        list: payload
-      }
+        list: payload,
+      };
     },
     [load.rejected]: (state) => {
       return {
         ...state,
-        loading: false
-      }
+        loading: false,
+      };
     },
     [removePlaylist.pending]: (state, _) => {
-      return { ...state }
+      return { ...state };
     },
     [removePlaylist.fulfilled]: (state, { payload }) => {
       return {
         ...state,
-        list: state.list.filter(item => item.id !== payload)
-      }
+        list: state.list.filter((item) => item.id !== payload),
+      };
     },
     [removePlaylist.rejected]: (state, _) => {
-      return { ...state }
+      return { ...state };
     },
   },
 });
