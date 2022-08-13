@@ -1,7 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import YouTube from "react-youtube";
 import { getReadableTimeString, timeoutPromise } from "../libs/misc.js";
-
+import {
+  CircularProgress,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 const VideoCollagePlaylist = ({ playListData }) => {
   //const [player, setPlayer] = useState(null);
   const playerRef = useRef(null);
@@ -149,28 +158,52 @@ const VideoCollagePlaylist = ({ playListData }) => {
           >
             {buttonTitle}
           </button>
-          <div>
-            {playListData &&
-              playListData.map((item, index) => {
-                return (
-                  <div
+          <div style={{ margin: 15 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <b>Slice</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Start time</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Duration</b>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {!playListData.length && (
+                  <TableRow>
+                    <TableCell align="center">
+                      List is empty, please fill it!
+                    </TableCell>
+                  </TableRow>
+                )}
+                {playListData.map((item, index) => (
+                  <TableRow
                     key={index}
-                    onDoubleClick={() => {
+                    onClick={() => {
                       switchToSpecifiedVideoFragment(index);
                     }}
                   >
-                    {index === curFragment ? (
-                      <b>Slice {index}</b>
-                    ) : (
-                      <>Slice {index}</>
-                    )}
+                    <TableCell>
+                      {index === curFragment ? (
+                        <b>Slice {index + 1}</b>
+                      ) : (
+                        <>Slice {index + 1}</>
+                      )}
+                    </TableCell>
 
-                    {/* {index === curFragment && </b>} */}
-                    {/* {item.id} {getReadableTimeString(item.start)} -{" "}
-                    {getReadableTimeString(item.end)} */}
-                  </div>
-                );
-              })}
+                    <TableCell>{getReadableTimeString(item.start)}</TableCell>
+                    <TableCell>
+                      {getReadableTimeString(item.end - item.start)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>
@@ -192,3 +225,24 @@ const VIDEO_IN_QUEUE_STATE = 5;
 3 – буферизация
 5 – видео находится в очереди
 */
+/*
+            {playListData &&
+              playListData.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      switchToSpecifiedVideoFragment(index);
+                    }}
+                  >
+                    {index === curFragment ? (
+                      <b>Slice {index}</b>
+                    ) : (
+                      <>Slice {index}</>
+                    )}
+                    <i> - {getReadableTimeString(item.start)}</i>
+                    <i> - {getReadableTimeString(item.end - item.start)}</i>
+
+                    </div>
+                    );
+                  })} */
