@@ -67,11 +67,7 @@ const Home = () => {
                 </TableCell>
 
                 <TableCell align="right">
-                  <IconButton
-                    onClick={() => {
-                      dispatch(removePlaylist({ id }));
-                    }}
-                  >
+                  <IconButton onClick={() => dispatch(removePlaylist({ id }))}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
