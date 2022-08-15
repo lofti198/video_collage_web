@@ -139,7 +139,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
         />
         <div>
           <button
-            style={{ margin: 15 }}
+            className="margin15"
             onClick={() => {
               console.log(playerRef.current?.playerInfo?.playerState);
               if (
@@ -158,7 +158,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
           >
             {buttonTitle}
           </button>
-          <div style={{ margin: 15 }}>
+          <div className="margin15">
             <Table>
               <TableHead>
                 <TableRow>

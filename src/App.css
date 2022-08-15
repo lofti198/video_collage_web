@@ -68,6 +68,14 @@
   }
 }
 
+.progress-bar {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+.margin15 {
+  margin: 15px;
+}
 .grid-item {
   /* background-color: aqua; */
   padding: 20px;

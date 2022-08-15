@@ -35,13 +35,7 @@ const Home = () => {
         <Typography variant="h4">My playlists</Typography>
       </div>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "3rem",
-          }}
-        >
+        <div className="progress-bar">
           <CircularProgress />
         </div>
       ) : (

@@ -8,7 +8,7 @@ const initialState = {
 
 export const load = createAsyncThunk("playList/getPlayList", async () =>
   // Waiting load from file simulation
-  new Promise((resolve) => setTimeout(() => resolve(data.list), 1500)).then(
+  new Promise((resolve) => setTimeout(() => resolve(data.list), 1000)).then(
     (data) => data
   )
 );
