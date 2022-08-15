@@ -16,15 +16,22 @@ const YoutubeErrorOnStart = () => {
   };
 
   useEffect(() => {
+    let timer2;
+    let timer1;
     if (playerRef.current && isReady) {
-      setTimeout(() => {
+      timer1 = setTimeout(() => {
         console.log(playerRef.current, isReady);
         playerRef.current.seekTo(3);
-        setTimeout(() => {
+        timer2 = setTimeout(() => {
           playerRef.current.playVideo();
         }, 1000);
       }, 1000);
     }
+
+    return () => {
+      timer1 && clearTimeout(timer1);
+      timer2 && clearTimeout(timer2);
+    };
   }, [isReady]);
 
   const _onReady = (event) => {
