@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import VideoCollagePlaylist from "../VideoCollagePlaylist";
+import VideoCollagePlaylist from "../Playlist";
 
 import { useSelector } from "react-redux";
 
-const PlayList = () => {
+const PlayListPage = () => {
   const playlists = useSelector((state) => {
     return state.playlists.list;
   });
@@ -35,4 +35,4 @@ const PlayList = () => {
   );
 };
 
-export default PlayList;
+export default PlayListPage;

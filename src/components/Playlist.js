@@ -19,7 +19,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
   const playerIsReadyRef = useRef(false);
   const [curFragment, setCurFragment] = useState(-1);
   const curFragmentRef = useRef(-1);
-  const someRef = useRef(-1);
+
   const [videoId, setVideoId] = useState();
   const [switchToRerender, setSwitchToRerender] = useState(false);
 
@@ -56,7 +56,6 @@ const VideoCollagePlaylist = ({ playListData }) => {
   useEffect(() => {
     if (playerRef.current && curFragment >= 0 && playerIsReady) {
       if (playListData[curFragment].id !== videoId) {
-        console.log(playListData[curFragment].id, videoId);
         setVideoId((prev) => {
           setPlayerIsReady(() => {
             playerIsReadyRef.current = false;
@@ -73,7 +72,6 @@ const VideoCollagePlaylist = ({ playListData }) => {
   const launchCurVideoFragment = async () => {
     playerRef.current?.playVideo();
     setTimeout(() => {
-      console.log("seeking to ", curFragment, playListData[curFragment].start);
       playerRef.current.seekTo(playListData[curFragment].start);
     }, 500);
   };
@@ -87,7 +85,7 @@ const VideoCollagePlaylist = ({ playListData }) => {
         newValue = 0;
         setSwitchToRerender((prev) => !prev);
       }
-      console.log("newValue of curFragment:", newValue);
+
       curFragmentRef.current = newValue;
       return newValue;
     });
@@ -104,8 +102,6 @@ const VideoCollagePlaylist = ({ playListData }) => {
   };
 
   const _onReady = (event) => {
-    someRef.current = 1;
-    //
     playerRef.current = event.target;
 
     setPlayerIsReady(() => {
@@ -122,8 +118,6 @@ const VideoCollagePlaylist = ({ playListData }) => {
           opts={opts}
           onReady={_onReady}
           onStateChange={() => {
-            // console.log(
-            //   "State changed",
             if (
               playerRef.current?.playerInfo?.playerState === VIDEO_PLAYING_STATE
             ) {
@@ -141,7 +135,6 @@ const VideoCollagePlaylist = ({ playListData }) => {
           <button
             className="margin15"
             onClick={() => {
-              console.log(playerRef.current?.playerInfo?.playerState);
               if (
                 playerRef.current?.playerInfo?.playerState ===
                   VIDEO_HAS_NOT_PLAYED_STATE ||

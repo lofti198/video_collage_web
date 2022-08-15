@@ -23,8 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = () => {
-  console.log("Home render");
+const HomePage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { loading, list } = useSelector((state) => state.playlists);
@@ -74,4 +73,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
