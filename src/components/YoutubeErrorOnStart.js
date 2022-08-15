@@ -20,7 +20,6 @@ const YoutubeErrorOnStart = () => {
     let timer1;
     if (playerRef.current && isReady) {
       timer1 = setTimeout(() => {
-        console.log(playerRef.current, isReady);
         playerRef.current.seekTo(3);
         timer2 = setTimeout(() => {
           playerRef.current.playVideo();
