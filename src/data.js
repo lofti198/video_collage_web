@@ -1,6 +1,26 @@
 export const data = {
   list: [
     {
+      id: "voice-low",
+      list: [
+        {
+          id: "KgRTJdSiLAM",
+          start: 166,
+          end: 195,
+        },
+        {
+          id: "KgRTJdSiLAM",
+          start: 352,
+          end: 377,
+        },
+        {
+          id: "KgRTJdSiLAM",
+          start: 385,
+          end: 416,
+        },
+      ],
+    },
+    {
       id: "yoga",
       list: [
         {
